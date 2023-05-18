@@ -1,5 +1,8 @@
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import UniqueConstraint
+
 
 User = get_user_model()
 POST_TEXT_LIMIT: int = 15
@@ -98,7 +101,7 @@ class Follow(models.Model):
         related_name='follower',
         verbose_name='Подписчик',
     )
-    author = models.ForeignKey(
+    following = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='following',
@@ -108,6 +111,18 @@ class Follow(models.Model):
     class Meta:
         verbose_name = 'Подписка'
         verbose_name_plural = 'Подписки',
+        constraints = [
+            UniqueConstraint(
+                name='unique_follow',
+                fields=['user', 'following'],
+            )
+        ]
+
+    def clean(self):
+        super().clean()
+
+        if self.user == self.author:
+            raise ValidationError('Нельзя подписаться на самого себя')
 
     def __str__(self):
         return f'{self.user.username} -> {self.author.username}'

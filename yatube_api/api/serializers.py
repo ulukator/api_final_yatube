@@ -32,12 +32,22 @@ class GroupSerializer(serializers.ModelSerializer):
 
 
 class FollowSerializer(serializers.ModelSerializer):
-    user = serializers.SlugRelatedField(
-        default=serializers.CurrentUserDefault(), slug_field='username'
+    user = SlugRelatedField(
+        default=serializers.CurrentUserDefault(),
+        slug_field='username',
+        read_only=True
     )
-    following = serializers.SlugRelatedField(
-        queryset=User.objects.all(), slug_field='username'
+    following = SlugRelatedField(
+        queryset=User.objects.all(),
+        slug_field='username',
     )
+
+    def validate(self, data):
+        if self.context.get('request').user == data.get('following'):
+            raise serializers.ValidationError(
+                'Нельзя подписаться на себя.'
+            )
+        return data
 
     class Meta:
         model = Follow
@@ -49,10 +59,3 @@ class FollowSerializer(serializers.ModelSerializer):
                 message='Уже подписаны на автора.'
             )
         )
-
-    def validate(self, data):
-        if self.context.get('request').user == data.get('following'):
-            raise serializers.ValidationError(
-                'Нельзя подписаться на себя.'
-            )
-        return data
