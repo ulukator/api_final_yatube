@@ -57,7 +57,7 @@ http://127.0.0.1:8000/api/v1/jwt/create/
 }
 ```
 Создать простой пост через API.
-Выбираем HEADERS, в поле Key вводим Authorization в поле
+Выбираем HEADERS, в поле Key вводим Authorization, в поле
 Value вводим Bearer пробел и наш токен, полученный на предыдущем шаге.
 ```
 Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXB...
