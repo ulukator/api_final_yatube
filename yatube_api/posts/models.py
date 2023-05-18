@@ -3,7 +3,6 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import UniqueConstraint
 
-
 User = get_user_model()
 POST_TEXT_LIMIT: int = 15
 
@@ -101,7 +100,7 @@ class Follow(models.Model):
         related_name='follower',
         verbose_name='Подписчик',
     )
-    author = models.ForeignKey(
+    following = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name='following',
@@ -114,7 +113,7 @@ class Follow(models.Model):
         constraints = [
             UniqueConstraint(
                 name='unique_follow',
-                fields=['user', 'author'],
+                fields=['user', 'following'],
             )
         ]
 
