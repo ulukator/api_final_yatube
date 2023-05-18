@@ -46,7 +46,7 @@ Cоздать суперпользователя:
 ```
 python3 manage.py createsuperuser
 ```
-Получаем токен через API:
+Получить токен через API:
 ```
 http://127.0.0.1:8000/api/v1/jwt/create/
 ```
